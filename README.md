@@ -8,18 +8,25 @@
 
 HtmlTest runner is a unittest test runner that saves results in a human-readable HTML format.
 
-This Package was inspired by ``unittest-xml-reporting`` and
+This Package is a modified version of oldani's HtmlTestRunner, which was inspired by ``unittest-xml-reporting`` and
 ``HtmlTestRunner by tungwaiyip`` and began by combining the methodology of the former with the functionality of the latter.
 
 ## Table of Content
 
-- [Intallation](#installation)
-- [Usage](#usage)
-- [Console Output](#console-output)
-- [Test Results](#test-result)
-- [Todo](#todo)
-- [Contributing](#contributing)
-- [Credits](#credits)
+- [HtmlTestRunner](#htmltestrunner)
+  - [Table of Content](#table-of-content)
+  - [Installation](#installation)
+  - [Usage:](#usage)
+    - [With unittest.main()](#with-unittestmain)
+    - [With Test Suites](#with-test-suites)
+    - [Combining Reports into a Single Report](#combining-reports-into-a-single-report)
+    - [Setting a filename](#setting-a-filename)
+  - [Console output:](#console-output)
+  - [Test Result:](#test-result)
+  - [Custom Templates:](#custom-templates)
+  - [TODO](#todo)
+  - [Contributing](#contributing)
+  - [Credits](#credits)
 
 ## Installation
 

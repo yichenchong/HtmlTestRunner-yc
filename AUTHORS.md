@@ -1,5 +1,7 @@
 # Credits
 
+## Modified
+* Yi Chen Chong <yichenchong@yahoo.com>
 
 ## Development Lead
 

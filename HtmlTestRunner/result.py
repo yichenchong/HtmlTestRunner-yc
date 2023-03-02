@@ -260,6 +260,7 @@ class HtmlTestResult(TextTestResult):
             if testcase_name not in tests_by_testcase:
                 tests_by_testcase[testcase_name] = []
             tests_by_testcase[testcase_name].append(subtest_info)
+            subtest_names.append(test_name)
 
         for tests in (self.successes, self.failures, self.errors, self.skipped):
             for test_info in tests:

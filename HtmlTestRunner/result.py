@@ -223,22 +223,22 @@ class HtmlTestResult(TextTestResult):
         testinfo = self.infoclass(self, test, self.infoclass.ERROR, err)
         self._prepare_callback(testinfo, self.errors, 'ERROR', 'E')
 
-    def addSubTest(self, testcase, test, err):
+    def addSubTest(self, testcase, subtest, err):
         """ Called when a subTest completes. """
         self._save_output_data()
         # TODO: should ERROR cases be considered here too?
         if err is None:
-            testinfo = self.infoclass(self, testcase, self.infoclass.SUCCESS, err, subTest=test)
+            testinfo = self.infoclass(self, testcase, self.infoclass.SUCCESS, err, subTest=subtest)
             self._prepare_callback(testinfo, self.successes, "OK", ".")
         else:
-            testinfo = self.infoclass(self, testcase, self.infoclass.FAILURE, err, subTest=test)
+            testinfo = self.infoclass(self, testcase, self.infoclass.FAILURE, err, subTest=subtest)
             self._prepare_callback(testinfo, self.failures, "FAIL", "F")
 
         test_id_components = str(testcase).rstrip(')').split(' (')
         test_id = test_id_components[1] + '.' + test_id_components[0]
-        # if test_id not in self.subtests:
-        #     self.subtests[test_id] = []
-        # self.subtests[test_id].append(testinfo)
+        if test_id not in self.subtests:
+            self.subtests[test_id] = []
+        self.subtests[test_id].append(testinfo)
 
     def addSkip(self, test, reason):
         """" Called when a test method was skipped. """
@@ -265,7 +265,8 @@ class HtmlTestResult(TextTestResult):
         tests_by_testcase = {}
 
         subtest_names = set(self.subtests.keys())
-        print(self.subtests)
+        print(set(self.subtests.values()))
+        print(subtest_names)
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])

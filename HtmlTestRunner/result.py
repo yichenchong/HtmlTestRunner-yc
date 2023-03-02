@@ -120,10 +120,21 @@ class _SubTestInfos(object):
 
     def check_outcome(self):
         outcome = _TestInfo.SUCCESS
+        allSkipped = True
+        failure = False
         for subtest in self.subtests:
-            if subtest.outcome != _TestInfo.SUCCESS:
-                outcome = _TestInfo.FAILURE
+            if subtest.outcome != _TestInfo.SKIP:
+                allSkipped = False
+            elif subtest.outcome != _TestInfo.SUCCESS:
+                if subtest.outcome == _TestInfo.ERROR:
+                    outcome = _TestInfo.ERROR
+                elif subtest.outcome == _TestInfo.FAILURE:
+                    failure = True
                 break
+        if failure:
+            outcome = _TestInfo.FAILURE
+        if allSkipped:
+            outcome = _TestInfo.SKIP
         return outcome
 
 
@@ -215,6 +226,7 @@ class HtmlTestResult(TextTestResult):
     def addSubTest(self, testcase, test, err):
         """ Called when a subTest completes. """
         self._save_output_data()
+        print("addSubTest: {}".format(testcase))
         # TODO: should ERROR cases be considered here too?
         if err is None:
             testinfo = self.infoclass(self, testcase, self.infoclass.SUCCESS, err, subTest=test)
@@ -254,8 +266,6 @@ class HtmlTestResult(TextTestResult):
         tests_by_testcase = {}
 
         subtest_names = set(self.subtests.keys())
-        print(self.subtests.items())
-        print(self.successes, self.failures, self.errors, self.skipped)
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])

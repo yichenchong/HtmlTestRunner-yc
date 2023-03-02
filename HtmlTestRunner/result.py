@@ -254,13 +254,13 @@ class HtmlTestResult(TextTestResult):
         tests_by_testcase = {}
 
         subtest_names = set(self.subtests.keys())
+        print(subtest_names)
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])
             if testcase_name not in tests_by_testcase:
                 tests_by_testcase[testcase_name] = []
             tests_by_testcase[testcase_name].append(subtest_info)
-            subtest_names.append(test_name)
 
         for tests in (self.successes, self.failures, self.errors, self.skipped):
             for test_info in tests:

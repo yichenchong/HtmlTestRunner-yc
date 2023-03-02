@@ -2,31 +2,88 @@ from unittest import TestCase, SkipTest
 import contextlib
 import sys
 
-class SubTestSkippableCase(TestCase):
+class Skips(sys.exc_info):
+        def __init__(self, reason):
+            self.reason = reason
+    
+        def __str__(self):
+            return self.reason
 
-    @contextlib.contextmanager
-    def testPartExecutor(self, test_case, isTest=False):
-        old_success = self.success
-        self.success = True
-        try:
-            yield
-        except KeyboardInterrupt:
-            raise
-        except SkipTest as e:
-            self.success = False
-            self.skipped.append((test_case, str(e)))
-        except:
-            exc_info = sys.exc_info()
-            if self.expecting_failure:
-                self.expectedFailure = exc_info
-            else:
-                self.success = False
-                self.errors.append((test_case, exc_info))
-            # explicitly break a reference cycle:
-            # exc_info -> frame -> exc_info
-            exc_info = None
+class SubTestSkippableCase(TestCase):
+    def __init__(self, methodName='runTest'):
+        super().__init__(methodName)
+        self.skip_errors = []
+
+    def run(self, result=None):
+        if result is None:
+            result = super.defaultTestResult()
+            startTestRun = getattr(result, 'startTestRun', None)
+            stopTestRun = getattr(result, 'stopTestRun', None)
+            if startTestRun is not None:
+                startTestRun()
         else:
-            if self.result_supports_subtests and self.success:
-                self.errors.append((test_case, None))
+            stopTestRun = None
+
+        result.startTest(super)
+        try:
+            testMethod = getattr(super, super._testMethodName)
+            if (getattr(super.__class__, "__unittest_skip__", False) or
+                getattr(testMethod, "__unittest_skip__", False)):
+                # If the class or method was skipped.
+                skip_why = (getattr(super.__class__, '__unittest_skip_why__', '')
+                            or getattr(testMethod, '__unittest_skip_why__', ''))
+                super._addSkip(result, super, skip_why)
+                return result
+
+            expecting_failure = (
+                getattr(super, "__unittest_expecting_failure__", False) or
+                getattr(testMethod, "__unittest_expecting_failure__", False)
+            )
+            outcome = super._Outcome(result)
+            try:
+                super._outcome = outcome
+
+                with outcome.testPartExecutor(super):
+                    super._callSetUp()
+                if outcome.success:
+                    outcome.expecting_failure = expecting_failure
+                    with outcome.testPartExecutor(super, isTest=True):
+                        super._callTestMethod(testMethod)
+                    outcome.expecting_failure = False
+                    with outcome.testPartExecutor(super):
+                        super._callTearDown()
+
+                super.doCleanups()
+                for test, reason in outcome.skipped:
+                    self.skip_errors.append(test, Skips(reason))
+                    super._addSkip(result, test, reason)
+                super._feedErrorsToResult(result, outcome.errors)
+                super._feedErrorsToResult(result, self.skip_errors)
+                if outcome.success:
+                    if expecting_failure:
+                        if outcome.expectedFailure:
+                            super._addExpectedFailure(result, outcome.expectedFailure)
+                        else:
+                            super._addUnexpectedSuccess(result)
+                    else:
+                        result.addSuccess(super)
+                return result
+            finally:
+                # explicitly break reference cycles:
+                # outcome.errors -> frame -> outcome -> outcome.errors
+                # outcome.expectedFailure -> frame -> outcome -> outcome.expectedFailure
+                outcome.errors.clear()
+                outcome.expectedFailure = None
+
+                # clear the outcome, no more needed
+                super._outcome = None
+
         finally:
-            self.success = self.success and old_success
+            result.stopTest(super)
+            if stopTestRun is not None:
+                stopTestRun()
+            
+
+    def skipTest(self, reason):
+        self.errors.append((SkipTest, SkipTest(reason), None))
+        raise SkipTest(reason)

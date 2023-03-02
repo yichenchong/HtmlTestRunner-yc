@@ -1,4 +1,4 @@
-from unittest import TestCase, SkipTest, _ShouldStop
+from unittest import TestCase, SkipTest
 import contextlib
 import sys
 

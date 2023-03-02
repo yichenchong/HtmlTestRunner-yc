@@ -225,6 +225,7 @@ class HtmlTestResult(TextTestResult):
 
     def addSubTest(self, testcase, test, err):
         """ Called when a subTest completes. """
+        print("here")
         self._save_output_data()
         # TODO: should ERROR cases be considered here too?
         if err is None:
@@ -244,7 +245,7 @@ class HtmlTestResult(TextTestResult):
         """" Called when a test method was skipped. """
         self._save_output_data()
         testinfo = self.infoclass(self, test, self.infoclass.SKIP, reason)
-        self._prepare_callback(testinfo, self.skipped, "SKIP", "S")
+        self._prepare_callback(self.infoclass(self, test), self.skipped, "SKIP", "S")
 
     def printErrorList(self, flavour, errors):
         """
@@ -289,8 +290,6 @@ class HtmlTestResult(TextTestResult):
         # unittest tests in alphabetical order based on test name so re-assert this
         for testcase in tests_by_testcase.values():
             testcase.sort(key=lambda x: x.test_id)
-        
-        print(tests_by_testcase)
 
         return tests_by_testcase
 

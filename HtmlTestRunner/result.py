@@ -226,7 +226,6 @@ class HtmlTestResult(TextTestResult):
     def addSubTest(self, testcase, test, err):
         """ Called when a subTest completes. """
         self._save_output_data()
-        print("addSubTest: {}".format(testcase))
         # TODO: should ERROR cases be considered here too?
         if err is None:
             testinfo = self.infoclass(self, testcase, self.infoclass.SUCCESS, err, subTest=test)
@@ -290,6 +289,8 @@ class HtmlTestResult(TextTestResult):
         # unittest tests in alphabetical order based on test name so re-assert this
         for testcase in tests_by_testcase.values():
             testcase.sort(key=lambda x: x.test_id)
+        
+        print(tests_by_testcase)
 
         return tests_by_testcase
 

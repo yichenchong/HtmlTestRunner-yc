@@ -230,6 +230,9 @@ class HtmlTestResult(TextTestResult):
         if err is None:
             testinfo = self.infoclass(self, testcase, self.infoclass.SUCCESS, err, subTest=subtest)
             self._prepare_callback(testinfo, self.successes, "OK", ".")
+        elif err == []:
+            testinfo = self.infoclass(self, testcase, self.infoclass.SKIP, err, subTest=subtest)
+            self._prepare_callback(testinfo, self.skipped, "SKIP", "S")
         else:
             testinfo = self.infoclass(self, testcase, self.infoclass.FAILURE, err, subTest=subtest)
             self._prepare_callback(testinfo, self.failures, "FAIL", "F")

@@ -83,7 +83,7 @@
                             </td>
                             <td class="col-xs-1">
                                 {%- if test_case.subtests %}
-                                <button class="btn btn-default btn-xs">View</button>
+                                <button class="btn btn-default btn-xs">View Subtests</button>
                                 {%- endif %}
                             </td>
                         </tr>
@@ -98,11 +98,15 @@
                                             <td class="col-xs-10">{{ subtest.test_id.split(".")[-1] }}</td>
                                             <td class="col-xs-1">
                                                 <span class="label label-{{ status_tags[subtest.outcome] }}" style="display:block;width:40px;">
-                                                {%- if subtest.outcome == subtest.SUCCESS -%}
-                                                    Pass
-                                                {%- else -%}
-                                                    Fail
-                                                {%- endif -%}
+                                                    {%- if subtest.outcome == subtest.SUCCESS -%}
+                                                        Pass
+                                                    {%- elif subtest.outcome == subtest.SKIP -%}
+                                                        Skip
+                                                    {%- elif subtest.outcome == subtest.FAILURE -%}
+                                                        Fail
+                                                    {%- else -%}
+                                                        Fail
+                                                    {%- endif -%}
                                                 </span>
                                             </td>
                                             <td class="col-xs-1">

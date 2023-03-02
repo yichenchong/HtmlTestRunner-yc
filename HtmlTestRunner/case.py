@@ -1,13 +1,4 @@
 from unittest import TestCase, SkipTest
-import contextlib
-import sys
-
-class Skips(sys._OptExcInfo):
-        def __init__(self, reason):
-            self.reason = reason
-    
-        def __str__(self):
-            return self.reason
 
 class SubTestSkippableCase(TestCase):
     def __init__(self, methodName='runTest'):
@@ -55,7 +46,8 @@ class SubTestSkippableCase(TestCase):
 
                 super.doCleanups()
                 for test, reason in outcome.skipped:
-                    self.skip_errors.append(test, Skips(reason))
+                    exc_info = []
+                    self.skip_errors.append(test, [])
                     super._addSkip(result, test, reason)
                 super._feedErrorsToResult(result, outcome.errors)
                 super._feedErrorsToResult(result, self.skip_errors)
@@ -82,8 +74,3 @@ class SubTestSkippableCase(TestCase):
             result.stopTest(super)
             if stopTestRun is not None:
                 stopTestRun()
-            
-
-    def skipTest(self, reason):
-        self.errors.append((SkipTest, SkipTest(reason), None))
-        raise SkipTest(reason)

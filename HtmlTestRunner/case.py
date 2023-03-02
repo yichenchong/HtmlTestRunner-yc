@@ -15,7 +15,8 @@ class SubTestSkippableCase(TestCase):
         except SkipTest as e:
             self.success = False
             self.skipped.append((test_case, str(e)))
-            self.errors.append((test_case, None))
+            if self.result_supports_subtests:
+                self.errors.append((test_case, None))
         except _ShouldStop:
             pass
         except:

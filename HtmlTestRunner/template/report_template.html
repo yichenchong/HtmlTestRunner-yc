@@ -76,6 +76,8 @@
                                 <span class="label label-{{ status_tags[test_case.outcome] }}" style="display:block;width:40px;">
                                     {%- if test_case.outcome == test_case.SUCCESS -%}
                                         Pass
+                                    {%- elif test_case.outcome == test_case.SKIP -%}
+                                        Skip
                                     {%- else -%}
                                         Fail
                                     {%- endif -%}
@@ -105,7 +107,7 @@
                                                     {%- elif subtest.outcome == subtest.FAILURE -%}
                                                         Fail
                                                     {%- else -%}
-                                                        Fail
+                                                        Error
                                                     {%- endif -%}
                                                 </span>
                                             </td>

@@ -232,7 +232,7 @@ class HtmlTestResult(TextTestResult):
             self._prepare_callback(testinfo, self.successes, "OK", ".")
         elif err == []:
             testinfo = self.infoclass(self, testcase, self.infoclass.SKIP, err, subTest=subtest)
-            self._prepare_callback(testinfo, self.skipped, "SKIP", "S")
+            # self._prepare_callback(testinfo, self.skipped, "SKIP", "S")
         else:
             testinfo = self.infoclass(self, testcase, self.infoclass.FAILURE, err, subTest=subtest)
             self._prepare_callback(testinfo, self.failures, "FAIL", "F")
@@ -268,7 +268,6 @@ class HtmlTestResult(TextTestResult):
         tests_by_testcase = {}
         
         subtest_names = set(self.subtests.keys())
-        print(subtest_names)
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])

@@ -9,7 +9,7 @@ class SubTestSkippableCase(TestCase):
 
     def run(self, result=None):
         if result is None:
-            result = super.defaultTestResult()
+            result = self.defaultTestResult()
             startTestRun = getattr(result, 'startTestRun', None)
             stopTestRun = getattr(result, 'stopTestRun', None)
             if startTestRun is not None:
@@ -17,7 +17,7 @@ class SubTestSkippableCase(TestCase):
         else:
             stopTestRun = None
 
-        result.startTest(super)
+        result.startTest(self)
         try:
             testMethod = getattr(self, self.methodName)
             if (getattr(self.__class__, "__unittest_skip__", False) or
@@ -46,7 +46,7 @@ class SubTestSkippableCase(TestCase):
                     with outcome.testPartExecutor(super):
                         super._callTearDown()
 
-                super.doCleanups()
+                self.doCleanups()
                 for test, reason in outcome.skipped:
                     self.skip_errors.append(test, [])
                     super._addSkip(result, test, reason)
@@ -59,7 +59,7 @@ class SubTestSkippableCase(TestCase):
                         else:
                             super._addUnexpectedSuccess(result)
                     else:
-                        result.addSuccess(super)
+                        result.addSuccess(self)
                 return result
             finally:
                 # explicitly break reference cycles:
@@ -71,6 +71,6 @@ class SubTestSkippableCase(TestCase):
                 # clear the outcome, no more needed
                 self._outcome = None
         finally:
-            result.stopTest(super)
+            result.stopTest(self)
             if stopTestRun is not None:
                 stopTestRun()

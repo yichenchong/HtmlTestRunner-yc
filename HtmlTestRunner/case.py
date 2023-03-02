@@ -3,7 +3,7 @@ from unittest.case import _Outcome
 
 class SubTestSkippableCase(TestCase):
     def __init__(self, methodName='runTest'):
-        super().__init__(methodName)
+        self().__init__(methodName)
         self.methodName = methodName
         self.skip_errors = []
 
@@ -25,7 +25,7 @@ class SubTestSkippableCase(TestCase):
                 # If the class or method was skipped.
                 skip_why = (getattr(self.__class__, '__unittest_skip_why__', '')
                             or getattr(testMethod, '__unittest_skip_why__', ''))
-                super._addSkip(result, self, skip_why)
+                self._addSkip(result, self, skip_why)
                 return result
 
             expecting_failure = (
@@ -36,28 +36,28 @@ class SubTestSkippableCase(TestCase):
             try:
                 self._outcome = outcome
 
-                with outcome.testPartExecutor(super):
-                    super._callSetUp()
+                with outcome.testPartExecutor(self):
+                    self._callSetUp()
                 if outcome.success:
                     outcome.expecting_failure = expecting_failure
-                    with outcome.testPartExecutor(super, isTest=True):
-                        super._callTestMethod(testMethod)
+                    with outcome.testPartExecutor(self, isTest=True):
+                        self._callTestMethod(testMethod)
                     outcome.expecting_failure = False
-                    with outcome.testPartExecutor(super):
-                        super._callTearDown()
+                    with outcome.testPartExecutor(self):
+                        self._callTearDown()
 
                 self.doCleanups()
                 for test, reason in outcome.skipped:
                     self.skip_errors.append(test, [])
-                    super._addSkip(result, test, reason)
-                super._feedErrorsToResult(result, outcome.errors)
-                super._feedErrorsToResult(result, self.skip_errors)
+                    self._addSkip(result, test, reason)
+                self._feedErrorsToResult(result, outcome.errors)
+                self._feedErrorsToResult(result, self.skip_errors)
                 if outcome.success:
                     if expecting_failure:
                         if outcome.expectedFailure:
-                            super._addExpectedFailure(result, outcome.expectedFailure)
+                            self._addExpectedFailure(result, outcome.expectedFailure)
                         else:
-                            super._addUnexpectedSuccess(result)
+                            self._addUnexpectedSuccess(result)
                     else:
                         result.addSuccess(self)
                 return result

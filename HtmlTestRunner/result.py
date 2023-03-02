@@ -81,6 +81,7 @@ class _TestInfo(object):
         self.err = err
         self.stdout = test_result._stdout_data
         self.stderr = test_result._stderr_data
+        print(test_method, test_result, subTest)
 
         self.is_subtest = subTest is not None
 

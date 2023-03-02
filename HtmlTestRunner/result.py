@@ -266,21 +266,23 @@ class HtmlTestResult(TextTestResult):
         """ Organize test results by TestCase module. """
 
         tests_by_testcase = {}
+        subtest_values = []
         
-        subtest_names = set(self.subtests.keys())
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])
             if testcase_name not in tests_by_testcase:
                 tests_by_testcase[testcase_name] = []
             tests_by_testcase[testcase_name].append(subtest_info)
+            for i in subtests:
+                subtest_values.append(i.test_id)
 
         for tests in (self.successes, self.failures, self.errors, self.skipped):
             for test_info in tests:
                 # subtests will be contained by _SubTestInfos objects but there is also the
                 # case where all subtests pass and the method is added as a success as well
                 # which must be filtered out
-                if test_info.is_subtest or test_info.test_id in subtest_names:
+                if test_info.is_subtest or test_info.test_id in subtest_values:
                     continue
                 if isinstance(test_info, tuple):  # TODO: does this ever occur?
                     test_info = test_info[0]

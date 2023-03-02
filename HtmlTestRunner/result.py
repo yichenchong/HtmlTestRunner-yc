@@ -350,7 +350,7 @@ class HtmlTestResult(TextTestResult):
                     elapsed_time += subtest.elapsed_time
 
         results_summary = {
-            "total": len(tests),
+            "total": errors + failures + skips + successes,
             "error": errors,
             "failure": failures,
             "skip": skips,

@@ -1,11 +1,21 @@
 from unittest import TestCase
-from unittest.case import _Outcome
+from unittest.case import _Outcome, _SubTest
 
 class SubTestSkippableCase(TestCase):
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)
         self.methodName = methodName
         self.skip_errors = []
+    
+    def _feedErrorsToResult(self, result, errors):
+        for test, exc_info in errors:
+            if isinstance(test, _SubTest):
+                result.addSubTest(test.test_case, test, exc_info)
+            elif exc_info is not None and exc_info != []:
+                if issubclass(exc_info[0], self.failureException):
+                    result.addFailure(test, exc_info)
+                else:
+                    result.addError(test, exc_info)
 
     def run(self, result=None):
         if result is None:

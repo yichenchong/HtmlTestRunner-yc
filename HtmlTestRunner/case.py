@@ -34,7 +34,7 @@ class SubTestSkippableCase(TestCase):
             )
             outcome = _Outcome(result)
             try:
-                super._outcome = outcome
+                self._outcome = outcome
 
                 with outcome.testPartExecutor(super):
                     super._callSetUp()
@@ -69,7 +69,7 @@ class SubTestSkippableCase(TestCase):
                 outcome.expectedFailure = None
 
                 # clear the outcome, no more needed
-                super._outcome = None
+                self._outcome = None
         finally:
             result.stopTest(super)
             if stopTestRun is not None:

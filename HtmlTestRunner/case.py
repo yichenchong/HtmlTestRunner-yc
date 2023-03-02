@@ -3,7 +3,7 @@ from unittest.case import _Outcome
 
 class SubTestSkippableCase(TestCase):
     def __init__(self, methodName='runTest'):
-        self().__init__(methodName)
+        super().__init__(methodName)
         self.methodName = methodName
         self.skip_errors = []
 

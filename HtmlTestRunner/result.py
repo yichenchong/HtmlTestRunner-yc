@@ -316,7 +316,7 @@ class HtmlTestResult(TextTestResult):
             test_failures = 0
             test_skips = 0
             test_successes = 0
-            if not isinstance(test, _SubTestInfos):
+            if isinstance(test, _SubTestInfos):
                 for subtest in test.subtests:
                     if subtest.outcome == test.ERROR:
                         test_errors += 1

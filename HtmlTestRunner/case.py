@@ -18,17 +18,17 @@ class SubTestSkippableCase(TestCase):
 
         result.startTest(super)
         try:
-            testMethod = getattr(super, self.methodName)
-            if (getattr(super.__class__, "__unittest_skip__", False) or
+            testMethod = getattr(self, self.methodName)
+            if (getattr(self.__class__, "__unittest_skip__", False) or
                 getattr(testMethod, "__unittest_skip__", False)):
                 # If the class or method was skipped.
-                skip_why = (getattr(super.__class__, '__unittest_skip_why__', '')
+                skip_why = (getattr(self.__class__, '__unittest_skip_why__', '')
                             or getattr(testMethod, '__unittest_skip_why__', ''))
-                super._addSkip(result, super, skip_why)
+                super._addSkip(result, self, skip_why)
                 return result
 
             expecting_failure = (
-                getattr(super, "__unittest_expecting_failure__", False) or
+                getattr(self, "__unittest_expecting_failure__", False) or
                 getattr(testMethod, "__unittest_expecting_failure__", False)
             )
             outcome = super._Outcome(result)
@@ -47,7 +47,6 @@ class SubTestSkippableCase(TestCase):
 
                 super.doCleanups()
                 for test, reason in outcome.skipped:
-                    exc_info = []
                     self.skip_errors.append(test, [])
                     super._addSkip(result, test, reason)
                 super._feedErrorsToResult(result, outcome.errors)
@@ -70,7 +69,6 @@ class SubTestSkippableCase(TestCase):
 
                 # clear the outcome, no more needed
                 super._outcome = None
-
         finally:
             result.stopTest(super)
             if stopTestRun is not None:

@@ -312,14 +312,34 @@ class HtmlTestResult(TextTestResult):
         failures = errors = skips = successes = 0
         for test in tests:
             outcome = test.outcome
-            if outcome == test.ERROR:
-                errors += 1
-            elif outcome == test.FAILURE:
-                failures += 1
-            elif outcome == test.SKIP:
-                skips += 1
-            elif outcome == test.SUCCESS:
-                successes += 1
+            test_errors = 0
+            test_failures = 0
+            test_skips = 0
+            test_successes = 0
+            if not isinstance(test, _SubTestInfos):
+                for subtest in test.subtests:
+                    if subtest.outcome == test.ERROR:
+                        test_errors += 1
+                    elif subtest.outcome == test.FAILURE:
+                        test_failures += 1
+                    elif subtest.outcome == test.SKIP:
+                        test_skips += 1
+                    elif subtest.outcome == test.SUCCESS:
+                        test_successes += 1
+            if test_errors + test_failures + test_skips + test_successes == 0:
+                if outcome == test.ERROR:
+                    errors += 1
+                elif outcome == test.FAILURE:
+                    failures += 1
+                elif outcome == test.SKIP:
+                    skips += 1
+                elif outcome == test.SUCCESS:
+                    successes += 1  
+            else:
+                errors += test_errors
+                failures += test_failures
+                skips += test_skips
+                successes += test_successes
 
         elapsed_time = 0
         for testinfo in tests:

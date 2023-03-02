@@ -3,6 +3,7 @@ from unittest import TestCase, SkipTest
 class SubTestSkippableCase(TestCase):
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)
+        self.methodName = methodName
         self.skip_errors = []
 
     def run(self, result=None):
@@ -17,7 +18,7 @@ class SubTestSkippableCase(TestCase):
 
         result.startTest(super)
         try:
-            testMethod = getattr(super, super._testMethodName)
+            testMethod = getattr(super, self.methodName)
             if (getattr(super.__class__, "__unittest_skip__", False) or
                 getattr(testMethod, "__unittest_skip__", False)):
                 # If the class or method was skipped.

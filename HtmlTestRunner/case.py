@@ -1,4 +1,5 @@
-from unittest import TestCase, SkipTest
+from unittest import TestCase
+from unittest.case import _Outcome
 
 class SubTestSkippableCase(TestCase):
     def __init__(self, methodName='runTest'):
@@ -31,7 +32,7 @@ class SubTestSkippableCase(TestCase):
                 getattr(self, "__unittest_expecting_failure__", False) or
                 getattr(testMethod, "__unittest_expecting_failure__", False)
             )
-            outcome = super._Outcome(result)
+            outcome = _Outcome(result)
             try:
                 super._outcome = outcome
 

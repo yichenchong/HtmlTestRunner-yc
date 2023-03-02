@@ -155,10 +155,10 @@
                 var $nextRow = $this.closest('tr').next('tr');
                 $nextRow.slideToggle("fast");
                 $this.text(function(i, text){
-                    if (text === 'View') {
-                        return 'Hide';
+                    if (text.includes("View")) {
+                        return text.replace("View", "Hide");
                     } else {
-                        return 'View';
+                        return text.replace("Hide", "View");
                     };
                 });
             });

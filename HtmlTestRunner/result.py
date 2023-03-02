@@ -265,7 +265,7 @@ class HtmlTestResult(TextTestResult):
         tests_by_testcase = {}
 
         subtest_names = set(self.subtests.keys())
-        print(self.subtests())
+        print(self.subtests)
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])

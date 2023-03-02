@@ -1,3 +1,0 @@
-[submodule "test/pytest/HtmlTestRunner"]
-	path = test/pytest/HtmlTestRunner
-	url = https://github.com/yichenchong/HtmlTestRunner-yc.git

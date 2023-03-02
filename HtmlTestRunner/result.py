@@ -229,10 +229,10 @@ class HtmlTestResult(TextTestResult):
         # TODO: should ERROR cases be considered here too?
         if err is None:
             testinfo = self.infoclass(self, testcase, self.infoclass.SUCCESS, err, subTest=subtest)
-            self._prepare_callback(testinfo, self.successes, "OK", ".")
+            # self._prepare_callback(testinfo, self.successes, "OK", ".")
         else:
             testinfo = self.infoclass(self, testcase, self.infoclass.FAILURE, err, subTest=subtest)
-            self._prepare_callback(testinfo, self.failures, "FAIL", "F")
+            # self._prepare_callback(testinfo, self.failures, "FAIL", "F")
 
         test_id_components = str(testcase).rstrip(')').split(' (')
         test_id = test_id_components[1] + '.' + test_id_components[0]
@@ -265,8 +265,6 @@ class HtmlTestResult(TextTestResult):
         tests_by_testcase = {}
 
         subtest_names = set(self.subtests.keys())
-        print(self.subtests.values())
-        print(subtest_names)
         for test_name, subtests in self.subtests.items():
             subtest_info = _SubTestInfos(test_name, subtests)
             testcase_name = ".".join(test_name.split(".")[:-1])

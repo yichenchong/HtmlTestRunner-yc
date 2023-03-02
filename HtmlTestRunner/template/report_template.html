@@ -105,7 +105,7 @@
                                                     {%- elif subtest.outcome == subtest.SKIP -%}
                                                         Skip
                                                     {%- elif subtest.outcome == subtest.FAILURE -%}
-                                                        Fail
+                                                        {{subtest.SKIP}}
                                                     {%- else -%}
                                                         Error
                                                     {%- endif -%}

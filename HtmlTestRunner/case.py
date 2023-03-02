@@ -48,7 +48,7 @@ class SubTestSkippableCase(TestCase):
 
                 self.doCleanups()
                 for test, reason in outcome.skipped:
-                    self.skip_errors.append(test, [])
+                    self.skip_errors.append((test, []))
                     self._addSkip(result, test, reason)
                 self._feedErrorsToResult(result, outcome.errors)
                 self._feedErrorsToResult(result, self.skip_errors)

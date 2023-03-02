@@ -2,7 +2,7 @@ from unittest import TestCase, SkipTest
 import contextlib
 import sys
 
-class Skips(sys.exc_info):
+class Skips(sys._OptExcInfo):
         def __init__(self, reason):
             self.reason = reason
     

@@ -128,8 +128,9 @@ class _SubTestInfos(object):
             elif subtest.outcome == _TestInfo.ERROR:
                 return _TestInfo.ERROR
             elif subtest.outcome == _TestInfo.FAILURE:
+                print("here")
                 outcome = _TestInfo.FAILURE
-            print(subtest.outcome)
+            print(outcome)
         print("Outcome: ", outcome)
         if allSkipped:
             outcome = _TestInfo.SKIP

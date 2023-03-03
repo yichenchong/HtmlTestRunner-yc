@@ -122,6 +122,7 @@ class _SubTestInfos(object):
         outcome = _TestInfo.SUCCESS
         allSkipped = True
         for subtest in self.subtests:
+            print(subtest.outcome)
             if subtest.outcome != _TestInfo.SKIP:
                 allSkipped = False
             elif subtest.outcome == _TestInfo.ERROR:

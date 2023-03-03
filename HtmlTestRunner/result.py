@@ -397,6 +397,7 @@ class HtmlTestResult(TextTestResult):
                     all_results={test_case_class_name: test_case_tests},
                     status_tags=status_tags,
                     summaries=summaries,
+                    
                     **testRunner.template_args
                 )
                 # append test case name if multiple reports to be generated

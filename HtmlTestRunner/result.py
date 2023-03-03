@@ -124,12 +124,10 @@ class _SubTestInfos(object):
         for subtest in self.subtests:
             if subtest.outcome != _TestInfo.SKIP:
                 allSkipped = False
-            elif subtest.outcome != _TestInfo.SUCCESS:
-                if subtest.outcome == _TestInfo.ERROR:
-                    return _TestInfo.ERROR
-                elif subtest.outcome == _TestInfo.FAILURE:
-                    outcome = _TestInfo.FAILURE
-                break
+            elif subtest.outcome == _TestInfo.ERROR:
+                return _TestInfo.ERROR
+            elif subtest.outcome == _TestInfo.FAILURE:
+                outcome = _TestInfo.FAILURE
         if allSkipped:
             outcome = _TestInfo.SKIP
         return outcome

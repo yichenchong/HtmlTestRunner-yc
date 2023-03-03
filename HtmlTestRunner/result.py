@@ -121,18 +121,15 @@ class _SubTestInfos(object):
     def check_outcome(self):
         outcome = _TestInfo.SUCCESS
         allSkipped = True
-        failure = False
         for subtest in self.subtests:
             if subtest.outcome != _TestInfo.SKIP:
                 allSkipped = False
             elif subtest.outcome != _TestInfo.SUCCESS:
                 if subtest.outcome == _TestInfo.ERROR:
-                    outcome = _TestInfo.ERROR
+                    return _TestInfo.ERROR
                 elif subtest.outcome == _TestInfo.FAILURE:
-                    failure = True
+                    outcome = _TestInfo.FAILURE
                 break
-        if failure:
-            outcome = _TestInfo.FAILURE
         if allSkipped:
             outcome = _TestInfo.SKIP
         return outcome
@@ -382,6 +379,13 @@ class HtmlTestResult(TextTestResult):
         status_tags = ('success', 'danger', 'warning', 'info')
         all_results = self._get_info_by_testcase()
         summaries = self._get_report_summaries(all_results, testRunner)
+
+        def _string_to_html(string):
+            """ Convert string to html. """
+            if isinstance(string, str):
+                return string.replace('\n', '<br/>')
+            else:
+                return string
 
         if not testRunner.combine_reports:
             for test_case_class_name, test_case_tests in all_results.items():
